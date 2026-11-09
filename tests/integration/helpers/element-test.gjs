@@ -12,6 +12,8 @@ import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { tracked } from '@glimmer/tracking';
 
+import { appEmberSatisfies, macroCondition } from '@embroider/macros';
+
 import { element } from '#src/index.ts';
 
 class State {
@@ -67,39 +69,43 @@ module('Integration | Helper | element', function (hooks) {
     );
   });
 
-  test('it does not render anything when passed null', async function (assert) {
-    await render(
-      <template>
-        <div id="root">
-          {{#let (element null) as |Tag|}}
-            <Tag id="content">hello world!</Tag>
-          {{/let}}
-        </div>
-      </template>,
-    );
+  if (macroCondition(appEmberSatisfies('<7.1.0'))) {
+    test('it does not render anything when passed null', async function (assert) {
+      await render(
+        <template>
+          <div id="root">
+            {{#let (element null) as |Tag|}}
+              <Tag id="content">hello world!</Tag>
+            {{/let}}
+          </div>
+        </template>,
+      );
 
-    assert.strictEqual(
-      this.element.querySelector('#root').innerHTML.trim(),
-      '<!---->',
-    );
-  });
+      assert.strictEqual(
+        this.element.querySelector('#root').innerHTML.trim(),
+        '<!---->',
+      );
+    });
+  }
 
-  test('it does not render anything when passed undefined', async function (assert) {
-    await render(
-      <template>
-        <div id="root">
-          {{#let (element undefined) as |Tag|}}
-            <Tag id="content">hello world!</Tag>
-          {{/let}}
-        </div>
-      </template>,
-    );
+  if (macroCondition(appEmberSatisfies('<7.1.0'))) {
+    test('it does not render anything when passed undefined', async function (assert) {
+      await render(
+        <template>
+          <div id="root">
+            {{#let (element undefined) as |Tag|}}
+              <Tag id="content">hello world!</Tag>
+            {{/let}}
+          </div>
+        </template>,
+      );
 
-    assert.strictEqual(
-      this.element.querySelector('#root').innerHTML.trim(),
-      '<!---->',
-    );
-  });
+      assert.strictEqual(
+        this.element.querySelector('#root').innerHTML.trim(),
+        '<!---->',
+      );
+    });
+  }
 
   test('it works with element modifiers', async function (assert) {
     let clicked = 0;
