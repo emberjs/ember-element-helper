@@ -65,7 +65,7 @@
     "@embroider/compat": "^4.1.0",
     "@embroider/core": "^4.1.0",
     "@embroider/macros": "^1.20.1",
-    "@embroider/vite": "^1.1.5",
+    "@embroider/vite": "^1.8.0",
     "@eslint/js": "^9.17.0",
     "@glimmer/component": "^2.0.0",
     "@glint/ember-tsc": "^1.0.3",
@@ -95,7 +95,7 @@
     "testem": "^3.15.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.19.1",
-    "vite": "^7.1.9",
+    "vite": "^8.3.0",
     "@release-it-plugins/lerna-changelog": "^6.0.0"
   },
   "ember": {
