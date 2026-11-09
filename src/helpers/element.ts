@@ -2,6 +2,11 @@
 import EmberComponent from '@ember/component';
 import Helper from '@ember/component/helper';
 import { assert, runInDebug } from '@ember/debug';
+import {
+  appEmberSatisfies,
+  importSync,
+  macroCondition,
+} from '@embroider/macros';
 
 import type { ComponentLike } from '@glint/template';
 
@@ -23,9 +28,7 @@ export interface ElementSignature<T extends string> {
   Return: Return<T> | undefined;
 }
 
-export default class ElementHelper<T extends string> extends Helper<
-  ElementSignature<T>
-> {
+class ElementHelper<T extends string> extends Helper<ElementSignature<T>> {
   tagName: string | (() => void) = UNINITIALIZED;
   componentClass?: Return<T>;
 
@@ -69,3 +72,7 @@ export default class ElementHelper<T extends string> extends Helper<
     return this.componentClass;
   }
 }
+
+export default (macroCondition(appEmberSatisfies('>=7.1.0'))
+  ? (importSync('@ember/helper') as { element: unknown }).element
+  : ElementHelper) as typeof ElementHelper;

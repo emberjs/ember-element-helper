@@ -4,18 +4,13 @@
 
 Dynamic element helper for Glimmer templates.
 
-This addon provides a ~~polyfill~~ high fidelity reference implementation of
-[RFC #389](https://github.com/emberjs/rfcs/pull/389), including the proposed
-amendments in [RFC PR #620](https://github.com/emberjs/rfcs/pull/620).
+This addon is a polyfill for [RFC #389](https://github.com/emberjs/rfcs/pull/389),
+including the proposed amendments in
+[RFC PR #620](https://github.com/emberjs/rfcs/pull/620).
 
-Please note that while [RFC #389](https://github.com/emberjs/rfcs/pull/389)
-has been approved, it has not been implemented in Ember.js yet. As such, the
-feature is still subject to change based on implementation feedback.
-
-When this feature is implemented in Ember.js, we will release a 1.0 version of
-this addon as a true polyfill for the feature, allowing the feature to be used
-on older Ember.js versions and be completely inert on newer versions where the
-official implementation is available.
+From ember-source 7.1, this addon re-exports the `element` helper from
+`@ember/helper`, and the limitations below do not apply. This needs
+`@embroider/macros` 1.19 or newer in your app.
 
 ## Compatibility
 
