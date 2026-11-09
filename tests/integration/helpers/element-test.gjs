@@ -7,6 +7,7 @@ import {
   settled,
   setupOnerror,
 } from '@ember/test-helpers';
+import { helper } from '@ember/component/helper';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { tracked } from '@glimmer/tracking';
@@ -171,14 +172,14 @@ module('Integration | Helper | element', function (hooks) {
 
   test('it renders when the tag name changes', async function (assert) {
     let count = 0;
-    const counter = () => ++count;
+    const counter = helper(() => ++count);
     const state = new State('h1');
 
     await render(
       <template>
         <div id="root">
           {{#let (element state.tagName) as |Tag|}}
-            <Tag id="content">rendered {{(counter)}} time(s)</Tag>
+            <Tag id="content">rendered {{counter}} time(s)</Tag>
           {{/let}}
         </div>
       </template>,
