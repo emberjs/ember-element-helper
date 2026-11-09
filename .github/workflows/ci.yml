@@ -1,34 +1,57 @@
 name: CI
 
 on:
-  workflow_dispatch: {}
-  pull_request: {}
   push:
     branches:
       - main
       - master
-    tags:
-      - v*
-  schedule:
-    - cron: "0 0 * * *"
+  pull_request: {}
 
 concurrency:
   group: ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: "Tests"
+  lint:
+    name: "Lints"
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
-      - name: Setup
-        uses: wyvox/action@v1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
       - name: Lint
         run: pnpm lint
+
+  test:
+    name: "Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
       - name: Run Tests
         run: pnpm test
+      # For the Try Scenarios
+      - id: set-matrix
+        run: |
+           echo "matrix=$(pnpm -s dlx @embroider/try list)" >> $GITHUB_OUTPUT
+          
 
   floating:
     name: "Floating Dependencies"
@@ -36,68 +59,44 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Setup
-        uses: wyvox/action@v1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
-          pnpm-args: --no-frozen-lockfile
+          node-version: 22
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --no-lockfile
       - name: Run Tests
         run: pnpm test
 
   try-scenarios:
-    name: ${{ matrix.try-scenario }}
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     needs: "test"
     timeout-minutes: 10
-
     strategy:
       fail-fast: false
-      matrix:
-        try-scenario:
-          - ember-lts-3.28
-          - ember-lts-4.4
-          - ember-lts-4.8
-          - ember-lts-4.12
-          - ember-5.0
-          - ember-release
-          - ember-beta
-          - ember-canary
-          - ember-classic
-          - embroider-safe
-          - embroider-optimized
+      matrix: ${{fromJson(needs.test.outputs.matrix)}}
 
     steps:
-      - name: Setup
-        uses: wyvox/action@v1
-      - name: Try Scenario
-        run: pnpm exec ember try:one ${{ matrix.try-scenario }} --skip-cleanup
-        working-directory: test-app
-
-  typecheck:
-    name: "${{ matrix.typescript-scenario }}"
-    runs-on: ubuntu-latest
-    needs: "test"
-    timeout-minutes: 5
-    continue-on-error: true
-    strategy:
-      fail-fast: true
-      matrix:
-        typescript-scenario:
-          - typescript@4.8
-          - typescript@4.9
-          - typescript@5.0
-          - typescript@5.1
-
-    steps:
-      - name: Setup
-        uses: wyvox/action@v1
-      - name: "Change TS to ${{ matrix.typescript-scenario }}"
-        run: "pnpm add --save-dev ${{ matrix.typescript-scenario}}"
-        working-directory: ./test-app
-      - name: "Type checking"
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Apply Scenario
         run: |
-          pnpm --filter "test-app*" exec tsc -v;
-          pnpm --filter "test-app*" exec glint --version;
-          pnpm --filter "test-app*" exec glint;
+           pnpm dlx @embroider/try apply ${{ matrix.name }}
+          
+      - name: Install Dependencies
+        run: pnpm install --no-lockfile
+      - name: Run Tests
+        run: |
+          pnpm test
+          
+        env: ${{ matrix.env }}
 
   publish:
     name: Publish
@@ -118,4 +117,3 @@ jobs:
         #  https://github.com/apimda/npm-layer-version/pull/2
         #  bug report: https://github.com/pnpm/pnpm/issues/5894
         run: pnpm publish --no-git-checks
-        working-directory: ember-element-helper
