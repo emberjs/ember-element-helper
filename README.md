@@ -4,18 +4,14 @@
 
 Dynamic element helper for Glimmer templates.
 
-This addon provides a ~~polyfill~~ high fidelity reference implementation of
-[RFC #389](https://github.com/emberjs/rfcs/pull/389), including the proposed
-amendments in [RFC PR #620](https://github.com/emberjs/rfcs/pull/620).
+This addon is a polyfill for [RFC #389](https://github.com/emberjs/rfcs/pull/389),
+including the proposed amendments in
+[RFC PR #620](https://github.com/emberjs/rfcs/pull/620).
 
-Please note that while [RFC #389](https://github.com/emberjs/rfcs/pull/389)
-has been approved, it has not been implemented in Ember.js yet. As such, the
-feature is still subject to change based on implementation feedback.
-
-When this feature is implemented in Ember.js, we will release a 1.0 version of
-this addon as a true polyfill for the feature, allowing the feature to be used
-on older Ember.js versions and be completely inert on newer versions where the
-official implementation is available.
+From ember-source 7.1, this addon re-exports the `element` helper from
+`@ember/helper`. The classic implementation is not part of your build. This
+needs `@embroider/macros` 1.19 or newer in your app. With an older version, the
+build fails.
 
 ## Compatibility
 
@@ -23,31 +19,20 @@ official implementation is available.
 * Ember CLI v3.28 or above
 * Node.js v12 or above
 
-## Limitations
+## Behavior before and from ember-source 7.1
 
-This implementation has the following known limitations:
+Before ember-source 7.1, the helper renders a classic component. From 7.1, the
+native helper renders the element. The differences are:
 
-* By default, an auto-generated `id` attribute will be added to the element
-  (e.g. `id="ember123"`). It is possible to override this by providing an
-  `id` attribute when invoking the component (e.g. `<Tag id="my-id" />`).
-  However, it is not possible to remove the `id` attribute completely. The
-  proposed helper will not have this behavior, as such this should not be
-  relied upon (e.g. in CSS and `qunit-dom` selectors).
+| | Before 7.1 | From 7.1 |
+|---|---|---|
+| `id` attribute | An auto-generated `id` (e.g. `id="ember123"`) is added. You can override it (e.g. `<Tag id="my-id" />`), but you cannot remove it. | No `id` is added. |
+| `class` attribute | An `ember-view` class is added and merged with your classes. You cannot remove it. | No class is added. |
+| `null` or `undefined` tag name | Nothing is rendered. | An assertion fails in development. In production, ember-source 7.4 renders the block without a wrapping element. |
 
-* The element will have an `ember-view` class (i.e. `class="ember-view"`).
-  This is in addition and merged with the class attribute provided when
-  invoking the component (e.g. `<Tag class="my-class" />` will result in
-  something like `<div class="ember-view my-class" />`). It is not possible
-  to remove the `ember-view` class. The proposed helper will not have this
-  behavior, as such this should not be relied upon (e.g. in CSS and `qunit-dom`
-  selectors).
-
-* In Ember versions before 3.11, modifiers cannot be passed to the element,
-  even when addons such as the [modifier manager](https://github.com/ember-polyfills/ember-modifier-manager-polyfill)
-  and [on modifier](https://github.com/buschtoens/ember-on-modifier) polyfills
-  are used. Doing so requires [RFC #435](https://github.com/emberjs/rfcs/blob/master/text/0435-modifier-splattributes.md)
-  which is first available on Ember 3.11. This is an Ember.js limitation,
-  unrelated to this addon.
+Do not rely on the auto-generated `id` or the `ember-view` class, for example
+in CSS and `qunit-dom` selectors. To render nothing, put the invocation in an
+`{{#if}}` block.
 
 ## Installation
 

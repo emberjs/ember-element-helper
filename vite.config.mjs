@@ -14,6 +14,12 @@ export default defineConfig({
       extensions,
     }),
   ],
+  // A compat build resolves `element` in a loose mode template at build time, as the `app-js` re-export does in an app.
+  resolve: {
+    alias: isCompat
+      ? { '@embroider/virtual/helpers/element': '/src/helpers/element.ts' }
+      : {},
+  },
   build: {
     rollupOptions: {
       input: {

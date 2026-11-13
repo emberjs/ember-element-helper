@@ -10,7 +10,14 @@ import {
 import { helper } from '@ember/component/helper';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
+import { precompileTemplate } from '@ember/template-compilation';
 import { tracked } from '@glimmer/tracking';
+
+import {
+  appEmberSatisfies,
+  importSync,
+  macroCondition,
+} from '@embroider/macros';
 
 import { element } from '#src/index.ts';
 
@@ -67,38 +74,91 @@ module('Integration | Helper | element', function (hooks) {
     );
   });
 
-  test('it does not render anything when passed null', async function (assert) {
-    await render(
-      <template>
-        <div id="root">
-          {{#let (element null) as |Tag|}}
-            <Tag id="content">hello world!</Tag>
+  if (macroCondition(appEmberSatisfies('>=7.1.0'))) {
+    test('it is the native helper', function (assert) {
+      assert.strictEqual(element, importSync('@ember/helper').element);
+    });
+
+    test('it renders no `ember-view` class and no `id`', async function (assert) {
+      await render(
+        <template>
+          {{#let (element "h1") as |Tag|}}
+            <Tag>hello world!</Tag>
           {{/let}}
-        </div>
-      </template>,
-    );
+        </template>,
+      );
 
-    assert.strictEqual(
-      this.element.querySelector('#root').innerHTML.trim(),
-      '<!---->',
-    );
-  });
+      assert.dom('h1').doesNotHaveAttribute('class').doesNotHaveAttribute('id');
+    });
 
-  test('it does not render anything when passed undefined', async function (assert) {
-    await render(
-      <template>
-        <div id="root">
-          {{#let (element undefined) as |Tag|}}
-            <Tag id="content">hello world!</Tag>
+    for (const [label, value] of [
+      ['null', null],
+      ['undefined', undefined],
+    ]) {
+      test(`it throws when passed ${label}`, async function (assert) {
+        expectError(
+          assert,
+          'Assertion Failed: The argument passed to the `element` helper must be a string',
+        );
+
+        await render(
+          <template>
+            <div>
+              {{#let (element value) as |Tag|}}
+                <Tag id="content">hello world!</Tag>
+              {{/let}}
+            </div>
+          </template>,
+        );
+      });
+    }
+  } else {
+    test('it is the classic helper', async function (assert) {
+      await render(
+        <template>
+          {{#let (element "h1") as |Tag|}}
+            <Tag>hello world!</Tag>
           {{/let}}
-        </div>
-      </template>,
+        </template>,
+      );
+
+      assert.dom('h1').hasClass('ember-view').hasAttribute('id');
+    });
+
+    for (const [label, value] of [
+      ['null', null],
+      ['undefined', undefined],
+    ]) {
+      test(`it does not render anything when passed ${label}`, async function (assert) {
+        await render(
+          <template>
+            <div id="root">
+              {{#let (element value) as |Tag|}}
+                <Tag id="content">hello world!</Tag>
+              {{/let}}
+            </div>
+          </template>,
+        );
+
+        assert.strictEqual(
+          this.element.querySelector('#root').innerHTML.trim(),
+          '<!---->',
+        );
+      });
+    }
+  }
+
+  test('it resolves from the registry in a loose mode template', async function (assert) {
+    this.owner.register('helper:element', element);
+
+    await render(
+      precompileTemplate(
+        `{{#let (element "h1") as |Tag|}}<Tag id="content">hello world!</Tag>{{/let}}`,
+        { strictMode: false },
+      ),
     );
 
-    assert.strictEqual(
-      this.element.querySelector('#root').innerHTML.trim(),
-      '<!---->',
-    );
+    assert.dom('h1#content').hasText('hello world!');
   });
 
   test('it works with element modifiers', async function (assert) {
