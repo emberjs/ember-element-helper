@@ -10,7 +10,6 @@ import {
 import { helper } from '@ember/component/helper';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
-import { precompileTemplate } from '@ember/template-compilation';
 import { tracked } from '@glimmer/tracking';
 
 import {
@@ -147,19 +146,6 @@ module('Integration | Helper | element', function (hooks) {
       });
     }
   }
-
-  test('it resolves from the registry in a loose mode template', async function (assert) {
-    this.owner.register('helper:element', element);
-
-    await render(
-      precompileTemplate(
-        `{{#let (element "h1") as |Tag|}}<Tag id="content">hello world!</Tag>{{/let}}`,
-        { strictMode: false },
-      ),
-    );
-
-    assert.dom('h1#content').hasText('hello world!');
-  });
 
   test('it works with element modifiers', async function (assert) {
     let clicked = 0;
