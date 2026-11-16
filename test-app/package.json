@@ -1,0 +1,37 @@
+{
+  "name": "test-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vite build --mode=development --out-dir dist-tests && testem --file testem.cjs ci --port 0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/runtime": "^7.25.6",
+    "@ember/optional-features": "^2.2.0",
+    "@ember/test-helpers": "^5.2.1",
+    "@ember/test-waiters": "^4.1.1",
+    "@embroider/compat": "^4.1.0",
+    "@embroider/core": "^4.1.0",
+    "@embroider/macros": "^1.20.1",
+    "@embroider/vite": "^1.8.0",
+    "@glimmer/component": "^2.0.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "babel-plugin-ember-template-compilation": "^4.0.0",
+    "decorator-transforms": "^2.2.2",
+    "ember-auto-import": "^2.10.0",
+    "ember-cli": "^5.12.0",
+    "ember-element-helper": "workspace:*",
+    "ember-qunit": "^9.0.2",
+    "ember-source": "^6.7.0",
+    "ember-strict-application-resolver": "^0.1.0",
+    "qunit": "^2.24.1",
+    "qunit-dom": "^3.4.0",
+    "testem": "^3.15.1",
+    "vite": "^8.3.0"
+  },
+  "ember": {
+    "edition": "octane"
+  }
+}
