@@ -46,7 +46,8 @@
     "lint:types": "ember-tsc --noEmit",
     "prepack": "rollup --config",
     "start": "vite dev",
-    "test": "vite build --mode=development --out-dir dist-tests && testem --file testem.cjs ci --port 0"
+    "test": "vite build --mode=development --out-dir dist-tests && testem --file testem.cjs ci --port 0",
+    "test:app": "pnpm --filter test-app test"
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.8.9",
