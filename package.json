@@ -72,7 +72,6 @@
     "@glint/ember-tsc": "^1.0.3",
     "@glint/template": "^1.6.1",
     "@glint/tsserver-plugin": "^2.0.0",
-    "@release-it-plugins/lerna-changelog": "^6.0.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@types/qunit": "^2.19.12",
     "babel-plugin-ember-template-compilation": "^4.0.0",
@@ -113,24 +112,6 @@
     "main": "addon-main.cjs",
     "app-js": {
       "./helpers/element.js": "./dist/_app_/helpers/element.js"
-    }
-  },
-  "release-it": {
-    "plugins": {
-      "@release-it-plugins/lerna-changelog": {
-        "infile": "CHANGELOG.md",
-        "launchEditor": true
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true,
-      "tokenRef": "GITHUB_AUTH"
-    },
-    "npm": {
-      "publish": false
     }
   }
 }
