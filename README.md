@@ -95,10 +95,13 @@ import { element } from 'ember-element-helper';
 </template>
 ```
 
-### Glint Usage in Classic Mode
+### Glint 1 usage in `.hbs` templates
 
-In order to use a typed `(element)` helper in classic mode, you need to import
-the addon's glint template registry and extend your app's registry declaration
+Glint 2 does not type-check `.hbs` templates. With Glint 2, import the helper
+in a `.gts` or `.gjs` file, as shown above. No registry is needed.
+
+With Glint 1, to use a typed `(element)` helper in `.hbs` templates, import
+the addon's Glint template registry and extend your app's registry declaration
 as described in the [Using
 Addons](https://typed-ember.gitbook.io/glint/using-glint/ember/using-addons#using-glint-enabled-addons)
 documentation:
