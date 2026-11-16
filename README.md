@@ -97,9 +97,6 @@ import { element } from 'ember-element-helper';
 
 ### Glint 1 usage in `.hbs` templates
 
-Glint 2 does not type-check `.hbs` templates. With Glint 2, import the helper
-in a `.gts` or `.gjs` file, as shown above. No registry is needed.
-
 With Glint 1, to use a typed `(element)` helper in `.hbs` templates, import
 the addon's Glint template registry and extend your app's registry declaration
 as described in the [Using
