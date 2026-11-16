@@ -1,0 +1,26 @@
+{
+  "solution": {
+    "ember-element-helper": {
+      "impact": "major",
+      "oldVersion": "0.8.8",
+      "newVersion": "1.0.0",
+      "tagName": "latest",
+      "constraints": [
+        {
+          "impact": "major",
+          "reason": "Appears in changelog section :boom: Breaking Change"
+        },
+        {
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
+        }
+      ],
+      "pkgJSONPath": "./package.json"
+    }
+  },
+  "description": "## Release (2026-11-16)\n\n* ember-element-helper 1.0.0 (major)\n\n#### :boom: Breaking Change\n* `ember-element-helper`\n  * [#127](https://github.com/emberjs/ember-element-helper/pull/127) Delegate to the native element helper on Ember 7.1+ ([@johanrd](https://github.com/johanrd))\n\n#### :rocket: Enhancement\n* `ember-element-helper`\n  * [#126](https://github.com/emberjs/ember-element-helper/pull/126) Update to the current v2 addon blueprint ([@johanrd](https://github.com/johanrd))\n\n#### :house: Internal\n* `ember-element-helper`\n  * [#130](https://github.com/emberjs/ember-element-helper/pull/130) Add release plan ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n  * [#129](https://github.com/emberjs/ember-element-helper/pull/129) Add a consumer app that tests `element` in a loose mode template ([@johanrd](https://github.com/johanrd))\n\n#### Committers: 2\n- Johan Røed ([@johanrd](https://github.com/johanrd))\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+}

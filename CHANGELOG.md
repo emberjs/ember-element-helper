@@ -1,5 +1,26 @@
 # Changelog
 
+## Release (2026-11-16)
+
+* ember-element-helper 1.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-element-helper`
+  * [#127](https://github.com/emberjs/ember-element-helper/pull/127) Delegate to the native element helper on Ember 7.1+ ([@johanrd](https://github.com/johanrd))
+
+#### :rocket: Enhancement
+* `ember-element-helper`
+  * [#126](https://github.com/emberjs/ember-element-helper/pull/126) Update to the current v2 addon blueprint ([@johanrd](https://github.com/johanrd))
+
+#### :house: Internal
+* `ember-element-helper`
+  * [#130](https://github.com/emberjs/ember-element-helper/pull/130) Add release plan ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+  * [#129](https://github.com/emberjs/ember-element-helper/pull/129) Add a consumer app that tests `element` in a loose mode template ([@johanrd](https://github.com/johanrd))
+
+#### Committers: 2
+- Johan Røed ([@johanrd](https://github.com/johanrd))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 
 
 
