@@ -7,7 +7,7 @@
     "element helper",
     "dynamic element"
   ],
-  "repository": "https://github.com/tildeio/ember-element-helper",
+  "repository": "https://github.com/emberjs/ember-element-helper",
   "license": "MIT",
   "author": "Godfrey Chan <godfrey@tilde.io>",
   "imports": {
@@ -72,6 +72,7 @@
     "@glint/ember-tsc": "^1.0.3",
     "@glint/template": "^1.6.1",
     "@glint/tsserver-plugin": "^2.0.0",
+    "@release-it-plugins/lerna-changelog": "^6.0.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@types/qunit": "^2.19.12",
     "babel-plugin-ember-template-compilation": "^4.0.0",
@@ -92,12 +93,16 @@
     "publint": "^0.3.16",
     "qunit": "^2.24.1",
     "qunit-dom": "^3.4.0",
+    "release-plan": "^0.18.0",
     "rollup": "^4.22.5",
     "testem": "^3.15.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.19.1",
-    "vite": "^8.3.0",
-    "@release-it-plugins/lerna-changelog": "^6.0.0"
+    "vite": "^8.3.0"
+  },
+  "packageManager": "pnpm@10.30.2",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "ember": {
     "edition": "octane"
@@ -109,9 +114,6 @@
     "app-js": {
       "./helpers/element.js": "./dist/_app_/helpers/element.js"
     }
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
   },
   "release-it": {
     "plugins": {
@@ -130,6 +132,5 @@
     "npm": {
       "publish": false
     }
-  },
-  "packageManager": "pnpm@10.30.2"
+  }
 }
