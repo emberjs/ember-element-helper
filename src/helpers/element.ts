@@ -1,11 +1,10 @@
-// eslint-disable-next-line ember/no-classic-components
-import EmberComponent from '@ember/component';
-import Helper from '@ember/component/helper';
-import { assert, runInDebug } from '@ember/debug';
+import {
+  appEmberSatisfies,
+  importSync,
+  macroCondition,
+} from '@embroider/macros';
 
 import type { ComponentLike } from '@glint/template';
-
-function UNINITIALIZED() {}
 
 export type ElementFromTagName<T extends string> =
   T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : Element;
@@ -23,49 +22,12 @@ export interface ElementSignature<T extends string> {
   Return: Return<T> | undefined;
 }
 
-export default class ElementHelper<T extends string> extends Helper<
-  ElementSignature<T>
-> {
-  tagName: string | (() => void) = UNINITIALIZED;
-  componentClass?: Return<T>;
+// The value is the native helper or a classic Helper class, so the type promises neither.
+type ElementHelper = <T extends string>(
+  ...positional: Positional<T>
+) => ElementSignature<T>['Return'];
 
-  compute(params: Positional<T>, hash: object) {
-    assert(
-      'The `element` helper takes a single positional argument',
-      params.length === 1,
-    );
-    assert(
-      'The `element` helper does not take any named arguments',
-      Object.keys(hash).length === 0,
-    );
-
-    const tagName = params[0];
-
-    if (tagName !== this.tagName) {
-      this.tagName = tagName;
-
-      if (typeof tagName === 'string') {
-        this.componentClass = class DynamicElement extends EmberComponent {
-          tagName = tagName;
-        } as unknown as Return<T>;
-      } else {
-        this.componentClass = undefined;
-
-        runInDebug(() => {
-          let message =
-            'The argument passed to the `element` helper must be a string';
-
-          try {
-            message += ` (you passed \`${String(tagName)}\`)`;
-          } catch {
-            // ignore
-          }
-
-          assert(message, tagName === undefined || tagName === null);
-        });
-      }
-    }
-
-    return this.componentClass;
-  }
-}
+export default (macroCondition(appEmberSatisfies('>=7.1.0'))
+  ? (importSync('@ember/helper') as { element: unknown }).element
+  : (importSync('../classic-element.js') as { default: unknown })
+      .default) as ElementHelper;
